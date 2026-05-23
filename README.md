@@ -1,9 +1,9 @@
 # 🦧 LAN Orangutan – Docker Stack für Portainer
 
-Produktiv-Setup für [LAN Orangutan](https://github.com/291-Group/LAN-Orangutan) als Portainer-Stack im Heimnetz/LAN.
-
-> **Upstream-Projekt:** [291-Group/LAN-Orangutan](https://github.com/291-Group/LAN-Orangutan)  
+> **Original Source:** [291-Group/LAN-Orangutan](https://github.com/291-Group/LAN-Orangutan)  
 > Self-hosted Netzwerk-Scanner mit Web-UI, Device-Labeling und nmap-Backend.
+
+Produktiv-Setup für [LAN Orangutan](https://github.com/291-Group/LAN-Orangutan) als Portainer-Stack im Heimnetz/LAN.
 
 ---
 
