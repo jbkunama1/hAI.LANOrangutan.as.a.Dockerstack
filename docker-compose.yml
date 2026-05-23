@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  lan-orangutan:
+    image: lan-orangutan:latest
+    container_name: lan-orangutan
+    restart: unless-stopped
+
+    # Host-Netzwerk: Container sieht direkt das LAN
+    # Damit kann nmap ARP-Scans machen + MAC-Adressen auflesen
+    network_mode: host
+
+    # nmap braucht NET_RAW fuer ARP-Scans im LAN
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+
+    environment:
+      TZ: Europe/Berlin  # Zeitzone anpassen
+
+    # Config-Pfad explizit uebergeben
+    command: serve --config /etc/lan-orangutan/config.ini
+
+    volumes:
+      # Persistente Geraetedaten (DB, Labels)
+      - lan_orangutan_data:/var/lib/lan-orangutan
+      # Config-Datei einbinden
+      - /opt/lan-orangutan/config/config.ini:/etc/lan-orangutan/config.ini:ro
+
+volumes:
+  lan_orangutan_data:
+    driver: local

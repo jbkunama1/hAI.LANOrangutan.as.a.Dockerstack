@@ -1,0 +1,6 @@
+# Echte Config mit sensiblen Daten NIEMALS einchecken!
+/opt/
+config.ini
+*.htpasswd
+*.env
+.env
