@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LAN Orangutan – Docker Stack</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #27a641;
+      --accent-hover: #2ea043;
+      --code-bg: #1f2428;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    header h1 { font-size: 1.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .lang-switch button {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.3rem 0.8rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+    .lang-switch button.active, .lang-switch button:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    main {
+      max-width: 860px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    .badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+    .badge {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.2rem 0.7rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .badge.green { border-color: var(--accent); color: var(--accent); }
+    h2 {
+      font-size: 1.2rem;
+      margin: 2rem 0 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    p { margin-bottom: 0.75rem; color: var(--muted); }
+    p a, .btn { color: var(--accent); text-decoration: none; }
+    p a:hover { text-decoration: underline; }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.2rem;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    code { font-family: 'Fira Code', 'Courier New', monospace; color: #79c0ff; }
+    pre code { color: var(--text); }
+    .copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: var(--border);
+      border: none;
+      color: var(--muted);
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.75rem;
+    }
+    .copy-btn:hover { background: var(--accent); color: #fff; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.6rem 0.9rem;
+      text-align: left;
+    }
+    th { background: var(--surface); color: var(--text); }
+    td { color: var(--muted); }
+    td code { color: #79c0ff; background: var(--code-bg); padding: 0.1rem 0.3rem; border-radius: 3px; }
+    .callout {
+      border-left: 3px solid var(--accent);
+      background: var(--surface);
+      padding: 0.8rem 1.2rem;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .steps { counter-reset: step; list-style: none; padding: 0; }
+    .steps li {
+      counter-increment: step;
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: flex-start;
+    }
+    .steps li::before {
+      content: counter(step);
+      background: var(--accent);
+      color: #fff;
+      width: 1.8rem;
+      height: 1.8rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+      font-size: 0.85rem;
+      margin-top: 0.15rem;
+    }
+    .steps li div { flex: 1; }
+    .steps li strong { display: block; color: var(--text); margin-bottom: 0.3rem; }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    [lang-content] { display: none; }
+    [lang-content].active { display: block; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🦧 LAN Orangutan – Docker Stack</h1>
+  <div class="lang-switch">
+    <button onclick="setLang('de')" id="btn-de" class="active">DE</button>
+    <button onclick="setLang('en')" id="btn-en">EN</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===== DEUTSCH ===== -->
+  <div lang-content="de" class="active">
+
+    <div class="badges">
+      <span class="badge green">✅ Produktiv-ready</span>
+      <span class="badge">Docker</span>
+      <span class="badge">Portainer</span>
+      <span class="badge">nmap</span>
+      <span class="badge">LAN-Scanner</span>
+      <span class="badge">Homelab</span>
+    </div>
+
+    <p>Produktiv-Setup für <a href="https://github.com/291-Group/LAN-Orangutan" target="_blank">LAN Orangutan</a> als Portainer-Stack im Heimnetz. Scannt dein LAN, erkennt Geräte, zeigt offene Ports und MAC-Adressen – alles über ein sauberes Web-Dashboard.</p>
+
+    <h2>🚀 Schritt-für-Schritt</h2>
+    <ol class="steps">
+      <li>
+        <div>
+          <strong>Upstream-Repo klonen &amp; Image bauen</strong>
+          <pre><code>git clone https://github.com/291-Group/LAN-Orangutan.git
+cd LAN-Orangutan
+docker build -t lan-orangutan:latest .</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Setup-Script ausführen</strong>
+          <pre><code>git clone https://github.com/jbkunama1/hAI.LANOrangutan.as.a.Dockerstack.git
+cd hAI.LANOrangutan.as.a.Dockerstack
+chmod +x setup.sh && sudo ./setup.sh</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Subnetz in Config eintragen</strong>
+          <pre><code>nano /opt/lan-orangutan/config/config.ini
+# scan_targets = 192.168.XXX.0/24</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Stack in Portainer deployen</strong>
+          <p>Portainer → Stacks → Add Stack → Web Editor → Inhalt von <code>docker-compose.yml</code> einfügen → Deploy</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Web-UI aufrufen</strong>
+          <pre><code>http://&lt;HOST-IP&gt;:2910</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+        </div>
+      </li>
+    </ol>
+
+    <h2>⚙️ Konfiguration</h2>
+    <table>
+      <tr><th>Parameter</th><th>Standard</th><th>Beschreibung</th></tr>
+      <tr><td><code>port</code></td><td><code>2910</code></td><td>Web-UI Port (muss &gt; 1024 sein)</td></tr>
+      <tr><td><code>scan_interval</code></td><td><code>300</code></td><td>Scan-Intervall in Sekunden</td></tr>
+      <tr><td><code>enable_port_scan</code></td><td><code>true</code></td><td>Port-Scan aktivieren</td></tr>
+      <tr><td><code>port_scan_range</code></td><td><code>1-1024,3000-3099,8000-8099</code></td><td>Zu scannende Ports</td></tr>
+      <tr><td><code>scan_targets</code></td><td><code>192.168.XXX.0/24</code></td><td>Zu scannendes Subnetz</td></tr>
+      <tr><td><code>retention_days</code></td><td><code>30</code></td><td>Tage für Offline-Geräte-Historie</td></tr>
+      <tr><td><code>theme</code></td><td><code>auto</code></td><td>UI-Theme: light / dark / auto</td></tr>
+    </table>
+
+    <h2>🔧 Technische Hintergründe</h2>
+    <div class="callout">ℹ️ <strong>network_mode: host</strong> &ndash; nmap benötigt direkten Zugriff auf das Netzwerk-Interface des Hosts für ARP-Scans (MAC-Adressen, Hersteller-Erkennung).</div>
+    <div class="callout">ℹ️ <strong>Port &gt; 1024</strong> &ndash; Der Container läuft als non-root User. Unter Linux dürfen nur root-Prozesse Ports unter 1024 binden.</div>
+    <div class="callout">ℹ️ <strong>cap_add: NET_RAW + NET_ADMIN</strong> &ndash; nmap braucht Raw-Sockets für ARP-Scans, ohne den Container komplett als root laufen zu lassen.</div>
+
+    <h2>⚠️ Sicherheitshinweis</h2>
+    <p>Die echte <code>config.ini</code> (mit deiner LAN-IP) niemals in ein öffentliches Repo einchecken. <code>.gitignore</code> schützt sie bereits. Für öffentlichen Zugriff einen Nginx Reverse Proxy mit Basic Auth vorschalten.</p>
+
+  </div>
+
+  <!-- ===== ENGLISH ===== -->
+  <div lang-content="en">
+
+    <div class="badges">
+      <span class="badge green">✅ Production-ready</span>
+      <span class="badge">Docker</span>
+      <span class="badge">Portainer</span>
+      <span class="badge">nmap</span>
+      <span class="badge">LAN Scanner</span>
+      <span class="badge">Homelab</span>
+    </div>
+
+    <p>Production-ready setup for <a href="https://github.com/291-Group/LAN-Orangutan" target="_blank">LAN Orangutan</a> as a Portainer stack in your home network. Scans your LAN, discovers devices, shows open ports and MAC addresses &ndash; all via a clean web dashboard.</p>
+
+    <h2>🚀 Step by Step</h2>
+    <ol class="steps">
+      <li>
+        <div>
+          <strong>Clone upstream repo &amp; build image</strong>
+          <pre><code>git clone https://github.com/291-Group/LAN-Orangutan.git
+cd LAN-Orangutan
+docker build -t lan-orangutan:latest .</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Run setup script</strong>
+          <pre><code>git clone https://github.com/jbkunama1/hAI.LANOrangutan.as.a.Dockerstack.git
+cd hAI.LANOrangutan.as.a.Dockerstack
+chmod +x setup.sh && sudo ./setup.sh</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Set your subnet in config</strong>
+          <pre><code>nano /opt/lan-orangutan/config/config.ini
+# scan_targets = 192.168.XXX.0/24</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Deploy stack in Portainer</strong>
+          <p>Portainer → Stacks → Add Stack → Web Editor → Paste <code>docker-compose.yml</code> → Deploy</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Open Web UI</strong>
+          <pre><code>http://&lt;HOST-IP&gt;:2910</code><button class="copy-btn" onclick="copyCode(this)">Copy</button></pre>
+        </div>
+      </li>
+    </ol>
+
+    <h2>⚙️ Configuration</h2>
+    <table>
+      <tr><th>Parameter</th><th>Default</th><th>Description</th></tr>
+      <tr><td><code>port</code></td><td><code>2910</code></td><td>Web UI port (must be &gt; 1024)</td></tr>
+      <tr><td><code>scan_interval</code></td><td><code>300</code></td><td>Scan interval in seconds</td></tr>
+      <tr><td><code>enable_port_scan</code></td><td><code>true</code></td><td>Enable port scanning</td></tr>
+      <tr><td><code>port_scan_range</code></td><td><code>1-1024,3000-3099,8000-8099</code></td><td>Ports to scan</td></tr>
+      <tr><td><code>scan_targets</code></td><td><code>192.168.XXX.0/24</code></td><td>Target subnet</td></tr>
+      <tr><td><code>retention_days</code></td><td><code>30</code></td><td>Days to keep offline device history</td></tr>
+      <tr><td><code>theme</code></td><td><code>auto</code></td><td>UI theme: light / dark / auto</td></tr>
+    </table>
+
+    <h2>🔧 Technical Background</h2>
+    <div class="callout">ℹ️ <strong>network_mode: host</strong> &ndash; nmap needs direct access to the host’s network interface for ARP scans (MAC addresses, vendor detection).</div>
+    <div class="callout">ℹ️ <strong>Port &gt; 1024</strong> &ndash; The container runs as a non-root user. On Linux, only root processes can bind to ports below 1024.</div>
+    <div class="callout">ℹ️ <strong>cap_add: NET_RAW + NET_ADMIN</strong> &ndash; nmap needs raw sockets for ARP scans without running the entire container as root.</div>
+
+    <h2>⚠️ Security Note</h2>
+    <p>Never commit your real <code>config.ini</code> (containing your LAN IP) to a public repo. <code>.gitignore</code> already protects it. For public access, add an Nginx reverse proxy with Basic Auth in front.</p>
+
+  </div>
+
+</main>
+
+<footer>
+  Based on <a href="https://github.com/291-Group/LAN-Orangutan" target="_blank">LAN Orangutan</a> by <a href="https://291group.com" target="_blank">291 Group</a> &nbsp;&bull;&nbsp;
+  <a href="https://github.com/jbkunama1/hAI.LANOrangutan.as.a.Dockerstack" target="_blank">GitHub Repo</a>
+</footer>
+
+<script>
+  function setLang(lang) {
+    document.querySelectorAll('[lang-content]').forEach(el => {
+      el.classList.toggle('active', el.getAttribute('lang-content') === lang);
+    });
+    document.getElementById('btn-de').classList.toggle('active', lang === 'de');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  }
+
+  function copyCode(btn) {
+    const code = btn.previousSibling.textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+
+  // Auto-detect browser language
+  const browserLang = navigator.language.startsWith('de') ? 'de' : 'en';
+  setLang(browserLang);
+</script>
+
+</body>
+</html>
