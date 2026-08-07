@@ -1,5 +1,9 @@
 # 🦧 LAN Orangutan – Docker Stack für Portainer
 
+<a href="https://www.buymeacoffee.com/highfish">
+<img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174">
+</a>
+
 > **Original Source:** [291-Group/LAN-Orangutan](https://github.com/291-Group/LAN-Orangutan)  
 > Self-hosted Netzwerk-Scanner mit Web-UI, Device-Labeling und nmap-Backend.
 
@@ -110,3 +114,4 @@ nmap braucht Raw-Sockets für ARP-Scans. Diese Capabilities erlauben das, ohne d
 ---
 
 *Basierend auf [LAN Orangutan](https://github.com/291-Group/LAN-Orangutan) von [291 Group](https://291group.com)*
+
