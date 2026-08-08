@@ -7,9 +7,7 @@
 
 
 
-<a href="https://www.buymeacoffee.com/highfish">
-<img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174">
-</a>
+[![Buy me a coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/highfish)
 
 > **Original Source:** [291-Group/LAN-Orangutan](https://github.com/291-Group/LAN-Orangutan)  
 > Self-hosted Netzwerk-Scanner mit Web-UI, Device-Labeling und nmap-Backend.
